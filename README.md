@@ -80,21 +80,21 @@ trúc dữ liệu cần cho việc giải nén theo thuật toán đã nói trê
     
 Để nén một file `filename` và tạo ra file nén `filename.hz`, ta sử dụng lệnh:
 
-    `./ac c filename filename.ac`
+    ./ac c filename filename.ac
 
 Để sử dụng mô hình thích nghi (adaptive model, mặc định là mô hình bán thích
 nghi - semiadaptive model), ta thêm `a` vào cuối câu lệnh:
 
-    `./ac c filename filename.ac a`
+    ./ac c filename filename.ac a
 
 Giải nén file nén trên thành file `filename.ex`, ta sử dụng lệnh:
 
-    `./ac x filename.ac filename.ex`
+    ./ac x filename.ac filename.ex
 
 Để nén dữ liệu thời gian thực (từ đầu vào chuẩn `stdin`), ta sử dụng `-` thay
 cho tên file đầu vào. VD: nén thư mục hiện tại, kết hợp với `tar`:
 
-    `tar cvf - . | ./ac c - directory.tar.ac a`
+    tar cvf - . | ./ac c - directory.tar.ac a
 
 Chú ý: chỉ có mô hình thích nghi mới nén được dữ liệu thời gian thực. Nếu không
 thêm `a` vào cuối câu lệnh thì chương trình cũng sẽ tự động chọn mô hình này.
@@ -102,8 +102,8 @@ thêm `a` vào cuối câu lệnh thì chương trình cũng sẽ tự động c
 Để giải nén ra đầu ra chuẩn (`stdout`), ta sử dụng `-` thay cho tên file đầu
 ra. VD: giải nén thư mục vừa nén vào thư mục `tmp`, kết hợp với `tar`:
 
-    `mkdir tmp`
-    `./ac x directory.tar.ac - | tar xvf - -C tmp`
+    mkdir tmp
+    ./ac x directory.tar.ac - | tar xvf - -C tmp
 
 ----
 ## Kết quả chạy
@@ -222,7 +222,7 @@ lớn hơn.
 
 Bảng kết quả trên được tạo ra bằng cách chạy script `compare.sh` đi kèm:
 
-    `./compare.sh <all test file>`
+    ./compare.sh <all test file>
 
 Với `<all test file>` là các file cần nén.
 
