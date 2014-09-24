@@ -19,6 +19,7 @@
 
 #include "bitstream.hh"
 #include "encoder.hh"
+#include <cstdio>
 
 template <typename Model>
 Encoder<Model>::Encoder(BitStream &ibs, BitStream &obs, Model &model)
@@ -30,12 +31,20 @@ void Encoder<Model>::encode()
 {
     start_encoding();
     Word w;
-    std::size_t encoded_words = 0;
+//    std::size_t encoded_words = 0;
     while (!_ibs.eof()) {
         w = _ibs.read<Word>(_word_length);
+//        if (encoded_words == 0x38b383f) {
+//            std::printf("offset 0x%lX\nw = 0x%X, [%lu, %lu] / %lu\nhigh = %lu, low = %lu, follow = %lu\n",
+//                         encoded_words, w, _model.range_start(w), _model.range_end(w),
+//                         _model.total(), _high, _low, _bits_to_follow);
+//        }
         encode_word(w);
+//        if (encoded_words == 0x38b383f) {
+//            std::printf("high = %lu, low = %lu\n", _high, _low);
+//        }
         _model.update(w);
-        ++encoded_words;
+//        ++encoded_words;
     }
     encode_word(Model::EOS);
     done_encoding();

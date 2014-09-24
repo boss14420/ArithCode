@@ -28,13 +28,31 @@ Decoder<Model>::Decoder(BitStream &ibs, BitStream &obs, Model &model)
 template <typename Model>
 void Decoder<Model>::decode()
 {
+//    std::size_t decoded_words = 0;
     start_decoding();
     Word w;
     while (!_ibs.eof()) {
+        // TODO: error at offset 0x38b383f whene Code_value_bits == 16
+//        if (decoded_words == 0x38b383f) {
+//            auto range = _high - _low + 1;
+//            auto accumulate = (((_value - _low) + 1) * _model.total() - 1) / range;
+//            std::printf("offset 0x%lX\nvalue = %lu, acc = %lu\n"
+//                        "high = %lu, low = %lu\n",
+//                         decoded_words, _value, accumulate,
+//                         _high, _low);
+//        }
         w = decode_word();
+//        if (decoded_words == 0x38b383f) {
+//            std::printf("w = 0x%X, [%lu, %lu] / %lu\n",
+//                         0xFF, _model.range_start(0xFF), _model.range_end(0xFF), _model.total());
+//            std::printf("w = 0x%X, [%lu, %lu] / %lu\nhigh = %lu, low = %lu\n",
+//                         w, _model.range_start(w), _model.range_end(w),
+//                         _model.total(), _high, _low);
+//        }
         if (w == Model::EOS) break;
         _obs.write(w, _word_length);
         _model.update(w);
+//        ++decoded_words;
     }
     
     if (w != Model::EOS)
@@ -43,6 +61,7 @@ void Decoder<Model>::decode()
             if (w == Model::EOS) break;
             _obs.write(w, _word_length);
             _model.update(w);
+//            ++decoded_words;
         }
 
     _obs.flush();

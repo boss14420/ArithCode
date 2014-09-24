@@ -37,7 +37,7 @@ bitstream.o: bitstream.cc bitstream.hh integer.hpp endian.hh
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 main.o: main.cc arithmetic.hh AdaptiveModel.hh SemiAdaptiveModel.hh encoder.hh decoder.hh \
-    	encoder.cc decoder.cc
+    	encoder.cc decoder.cc model.hh
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: clean
