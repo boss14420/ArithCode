@@ -29,7 +29,7 @@ void AdaptiveModel::init(std::vector<value_type> const& freq)
 
 void AdaptiveModel::update(Word w)
 {
-    if (_ft.total() == Top_value)
+    if (_ft.total() == Max_freq)
         _ft.scaleDown(2, 1);
     _ft.update(w + 1, 1);
 //    if (_accumulate_table[w+1] == Top_value) {

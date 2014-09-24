@@ -33,18 +33,18 @@ void SemiAdaptiveModel::init(std::vector<value_type> const& freq)
 ////        _freq_table[w] = 200;
     
     // accumulate table
-    value_type total = std::accumulate(freq.begin(), freq.end(), 0) + 1;
+    value_type total = std::accumulate(freq.begin(), freq.end(), 0);
     _accumulate_table.assign(nwords + 1, 0);
     for (Word w = 0; w != nwords-1; ++w) {
 //        _accumulate_table[w+1] = _accumulate_table[w] + freq[w];
 
 //        auto range = freq[w] * Top_value / 3 * 2 / total;
-        auto range = freq[w] * Top_value / total;
-        if (range < 2 && freq[w] > 0) range = 2;
+        auto range = std::max(2UL, freq[w] * Max_freq / total);
+//        if (range < 1 && freq[w] > 0) range = 1;
         _accumulate_table[w+1] = _accumulate_table[w] + range;
     }
     _accumulate_table[EOS+1] = _accumulate_table[EOS] +
-            std::max(3UL, Top_value / total);
+            std::max(2UL, Max_freq / total);
 //    std::cout << _accumulate_table[EOS+1] << '\n';
 }
 
