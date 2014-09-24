@@ -34,7 +34,7 @@ public:
 
     FenwickTree() {}
 
-    FenwickTree(std::size_t sz, T initialValue) { reset(sz, initialValue); }
+    FenwickTree(std::size_t sz, T initialValue) { assign(sz, initialValue); }
 
     void assign(std::size_t sz, T initialValue) {
         MostSignificationBit = 1ULL << (sizeof(T)*8 - 1);
@@ -52,6 +52,20 @@ public:
         while (idx) {
             sum += _tree[idx];
             idx -= LS1Bit(idx);
+        }
+        return sum;
+    }
+
+    T freq(std::size_t idx) const
+    {
+        T sum = _tree[idx];
+        if (idx > 0) {
+            std::size_t z = idx - LS1Bit(idx);
+            --idx;
+            while (idx != z) {
+                sum -= _tree[idx];
+                idx -= LS1Bit(idx);
+            }
         }
         return sum;
     }
@@ -78,9 +92,20 @@ public:
     }
 
     void scaleDown(T c, T min) { 
-        for (std::size_t idx = 1; idx < _tree.size(); ++idx)
-            _tree[idx] = std::max(_tree[idx] / c, min);
-//            _tree[idx] = std::min(_tree[idx] / c, min * LS1Bit(idx));
+/*         for (std::size_t idx = 1; idx < _tree.size(); ++idx)
+ * //            _tree[idx] = std::max(_tree[idx] / c, min);
+ *             _tree[idx] = std::max(_tree[idx] / c, min * LS1Bit(idx));
+ *         _total = cumulate_freq(_tree.size() - 1);
+ */
+        // TODO: O(sz) algorithm
+//        assign(_tree.size() - 1, min);
+        std::vector<T> freq_table(_tree.size() - 1);
+        for (std::size_t idx = 0; idx < _tree.size() - 1; ++idx)
+            freq_table[idx] = freq(idx + 1);
+        assign(_tree.size() - 1, 0);
+        for (std::size_t idx = 1; idx < _tree.size(); ++idx) {
+            update(idx, std::max(freq_table[idx-1] / c, min));
+        }
         _total = cumulate_freq(_tree.size() - 1);
     }
 
